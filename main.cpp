@@ -8,7 +8,7 @@
 
 
 #define MAX_DIGITS 1000001
-
+char number[MAX_DIGITS] = {};
 
 int main()
 {
@@ -16,21 +16,46 @@ int main()
     scanf("%d", &T);
     while (T--)
     {
-        char number[MAX_DIGITS] = {};
+
         scanf("%s", number);
         u32 numDigits = strlen(number);
 
         s32 fhIndex = (numDigits / 2) - 1;
         if (fhIndex < 0) fhIndex = 0;
-        u32 incrementBy = 1;
-        while (incrementBy == 1 && fhIndex >= 0)
+        s32 lhIndex = (numDigits - 1) - fhIndex;
+
+        while (fhIndex > 0 && number[fhIndex] == '0') fhIndex--; //Eat leading zeroes
+        while (lhIndex < numDigits - 1 && number[lhIndex] == '0') lhIndex++; //Eat leading zeroes
+
+        u32 incrementBy;
+        u32 numDigitsInFh = (fhIndex + 1);
+        u32 numDigitsInLh = (numDigits - lhIndex);
+        if (numDigitsInFh > numDigitsInLh)
         {
-            s32 lhIndex = (numDigits - 1) - fhIndex;
-            if (number[fhIndex] > number[lhIndex])
+            incrementBy = 0;
+        }
+        else if (numDigitsInFh < numDigitsInLh)
+        {
+            incrementBy = 1;
+        }
+        else
+        {
+            incrementBy = 1;
+            while (fhIndex >= 0 && lhIndex < numDigits)
             {
-                incrementBy = 0;
+                if (number[fhIndex] > number[lhIndex])
+                {
+                    incrementBy = 0;
+                    break;
+                }
+                else if (number[fhIndex] < number[lhIndex])
+                {
+                    break;
+                }
+
+                fhIndex--;
+                lhIndex++;
             }
-            fhIndex--;
         }
 
 
